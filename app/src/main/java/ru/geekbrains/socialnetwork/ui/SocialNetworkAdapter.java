@@ -1,22 +1,29 @@
 package ru.geekbrains.socialnetwork.ui;
 
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import ru.geekbrains.socialnetwork.R;
+import ru.geekbrains.socialnetwork.data.CardData;
+import ru.geekbrains.socialnetwork.data.CardsSource;
 
 public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdapter.ViewHolder> {
 
-    private String[] dataSource;
+    private final static String TAG = "SocialNetworkAdapter";
+    private CardsSource dataSource;
     private OnItemClickListener itemClickListener;
 
-    public SocialNetworkAdapter(String[] dataSource){
+    public SocialNetworkAdapter(CardsSource dataSource){
         this.dataSource = dataSource;
     }
 
@@ -24,17 +31,19 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
     @Override
     public SocialNetworkAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
+        Log.d(TAG, "onCreateViewHolder");
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull SocialNetworkAdapter.ViewHolder holder, int position) {
-        holder.getTextView().setText(dataSource[position]);
+        holder.bind(dataSource.getCardData(position));
+        Log.d(TAG, "onBindViewHolder");
     }
 
     @Override
     public int getItemCount() {
-        return dataSource.length;
+        return dataSource.size();
     }
 
     public void setOnItemClickListener(OnItemClickListener itemClickListener) {
@@ -47,13 +56,19 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView textView;
+        private TextView title;
+        private TextView description;
+        private AppCompatImageView image;
+        private CheckBox like;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView = (TextView) itemView;
+            title = itemView.findViewById(R.id.title);
+            description = itemView.findViewById(R.id.description);
+            image = itemView.findViewById(R.id.imageView);
+            like = itemView.findViewById(R.id.like);
 
-            textView.setOnClickListener(new View.OnClickListener() {
+            image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (itemClickListener != null){
@@ -63,8 +78,11 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
             });
         }
 
-        public TextView getTextView(){
-            return textView;
+        public void bind(CardData cardData){
+            title.setText(cardData.getTitle());
+            description.setText(cardData.getDescription());
+            like.setChecked(cardData.isLike());
+            image.setImageResource(cardData.getPicture());
         }
     }
 }
