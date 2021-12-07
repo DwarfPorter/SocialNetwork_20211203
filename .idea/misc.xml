@@ -8,10 +8,11 @@
         <entry key="..\:/DwarfPorter/GeekBrains/AndroidBase-2021-11-02/Course/Lesson-10/SocialNetwork/app/src/main/res/layout/content_main.xml" value="0.29322916666666665" />
         <entry key="..\:/DwarfPorter/GeekBrains/AndroidBase-2021-11-02/Course/Lesson-10/SocialNetwork/app/src/main/res/layout/fragment_socialnetwork.xml" value="0.29322916666666665" />
         <entry key="..\:/DwarfPorter/GeekBrains/AndroidBase-2021-11-02/Course/Lesson-10/SocialNetwork/app/src/main/res/layout/item.xml" value="0.29322916666666665" />
+        <entry key="..\:/DwarfPorter/GeekBrains/AndroidBase-2021-11-02/Course/Lesson-11/SocialNetwork/app/src/main/res/menu/cards_menu.xml" value="0.29322916666666665" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
