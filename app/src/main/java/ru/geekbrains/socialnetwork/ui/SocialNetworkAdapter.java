@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import ru.geekbrains.socialnetwork.R;
@@ -21,10 +22,12 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
 
     private final static String TAG = "SocialNetworkAdapter";
     private CardsSource dataSource;
+    private final Fragment fragment;
     private OnItemClickListener itemClickListener;
 
-    public SocialNetworkAdapter(CardsSource dataSource){
+    public SocialNetworkAdapter(CardsSource dataSource, Fragment fragment){
         this.dataSource = dataSource;
+        this.fragment = fragment;
     }
 
     @NonNull
@@ -68,6 +71,8 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
             image = itemView.findViewById(R.id.imageView);
             like = itemView.findViewById(R.id.like);
 
+            registerContextMenu(itemView);
+
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -76,6 +81,12 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
                     }
                 }
             });
+        }
+
+        private void registerContextMenu(@NonNull View itemView) {
+            if (fragment != null) {
+                fragment.registerForContextMenu(itemView);
+            }
         }
 
         public void bind(CardData cardData){
