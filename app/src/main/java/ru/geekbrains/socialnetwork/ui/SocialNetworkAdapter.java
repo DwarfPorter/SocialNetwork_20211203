@@ -26,6 +26,7 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
     private CardsSource dataSource;
     private final Fragment fragment;
     private OnItemClickListener itemClickListener;
+    private int menuPosition;
 
     public SocialNetworkAdapter(CardsSource dataSource, Fragment fragment){
         this.dataSource = dataSource;
@@ -53,6 +54,10 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
 
     public void setOnItemClickListener(OnItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
+    }
+
+    public int getMenuPosition() {
+        return menuPosition;
     }
 
     public interface OnItemClickListener {
@@ -89,6 +94,7 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
                 @Override
                 public boolean onLongClick(View view) {
                     itemView.showContextMenu(10, 10);
+                    menuPosition = getLayoutPosition();
                     return true;
                 }
             });
@@ -96,6 +102,13 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
 
         private void registerContextMenu(@NonNull View itemView) {
             if (fragment != null) {
+                itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        menuPosition = getLayoutPosition();
+                        return false;
+                    }
+                });
                 fragment.registerForContextMenu(itemView);
             }
         }

@@ -8,7 +8,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -45,7 +44,7 @@ public class SocialNetworkFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_add:
                 data.addCardData(new CardData("Заголовок " + data.size(),
                         "Описание " + data.size(),
@@ -71,10 +70,19 @@ public class SocialNetworkFragment extends Fragment {
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        int position = adapter.getMenuPosition();
+        switch (item.getItemId()) {
             case R.id.action_update:
+                data.updateCardData(position,
+                        new CardData("Кадр " + position,
+                                data.getCardData(position).getDescription(),
+                                data.getCardData(position).getPicture(),
+                                false));
+                adapter.notifyItemChanged(position);
                 return true;
             case R.id.action_delete:
+                data.deleteCardData(position);
+                adapter.notifyItemRemoved(position);
                 return true;
         }
         return super.onContextItemSelected(item);
