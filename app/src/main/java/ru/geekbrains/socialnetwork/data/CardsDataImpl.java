@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import ru.geekbrains.socialnetwork.R;
@@ -24,7 +25,7 @@ public class CardsDataImpl implements CardsSource {
         int[] pictures = getImageArray();
         int length = descriptions.length;
         for (int i=0; i < length; i++){
-            dataSource.add(new CardData(titles[i], descriptions[i], pictures[i], false));
+            dataSource.add(new CardData(titles[i], descriptions[i], pictures[i], false, Calendar.getInstance().getTime()));
         }
         return this;
     }

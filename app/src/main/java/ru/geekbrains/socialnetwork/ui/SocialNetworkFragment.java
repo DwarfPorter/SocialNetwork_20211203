@@ -1,5 +1,6 @@
 package ru.geekbrains.socialnetwork.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -18,10 +19,14 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import ru.geekbrains.socialnetwork.MainActivity;
+import ru.geekbrains.socialnetwork.Navigation;
 import ru.geekbrains.socialnetwork.R;
 import ru.geekbrains.socialnetwork.data.CardData;
 import ru.geekbrains.socialnetwork.data.CardsDataImpl;
 import ru.geekbrains.socialnetwork.data.CardsSource;
+import ru.geekbrains.socialnetwork.observe.Observer;
+import ru.geekbrains.socialnetwork.observe.Publisher;
 
 public class SocialNetworkFragment extends Fragment {
 
@@ -29,6 +34,14 @@ public class SocialNetworkFragment extends Fragment {
     private CardsSource data;
     private SocialNetworkAdapter adapter;
     private RecyclerView recyclerView;
+    private Navigation navigation;
+    private Publisher publisher;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        data = new CardsDataImpl(getResources()).init();
+    }
 
     @Nullable
     @Override
@@ -48,12 +61,14 @@ public class SocialNetworkFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                data.addCardData(new CardData("Заголовок " + data.size(),
-                        "Описание " + data.size(),
-                        R.drawable.nature1,
-                        false));
-                adapter.notifyItemInserted(data.size() - 1);
-                recyclerView.smoothScrollToPosition(data.size() - 1);
+                navigation.addFragment(CardFragment.newInstance(), true);
+                publisher.subscribe(new Observer() {
+                    @Override
+                    public void updateCardData(CardData cardData) {
+                        data.addCardData(cardData);
+                        adapter.notifyItemInserted(data.size() - 1);
+                    }
+                });
                 return true;
             case R.id.action_clear:
                 data.clearCardData();
@@ -75,12 +90,14 @@ public class SocialNetworkFragment extends Fragment {
         int position = adapter.getMenuPosition();
         switch (item.getItemId()) {
             case R.id.action_update:
-                data.updateCardData(position,
-                        new CardData("Кадр " + position,
-                                data.getCardData(position).getDescription(),
-                                data.getCardData(position).getPicture(),
-                                false));
-                adapter.notifyItemChanged(position);
+                navigation.addFragment(CardFragment.newInstance(data.getCardData(position)), true);
+                publisher.subscribe(new Observer() {
+                    @Override
+                    public void updateCardData(CardData cardData) {
+                        data.updateCardData(position, cardData);
+                        adapter.notifyItemChanged(position);
+                    }
+                });
                 return true;
             case R.id.action_delete:
                 data.deleteCardData(position);
@@ -90,9 +107,23 @@ public class SocialNetworkFragment extends Fragment {
         return super.onContextItemSelected(item);
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        MainActivity activity = (MainActivity)context;
+        navigation = activity.getNavigation();
+        publisher = activity.getPublisher();
+    }
+
+    @Override
+    public void onDetach() {
+        navigation = null;
+        publisher = null;
+        super.onDetach();
+    }
+
     private void initViews(View view) {
         recyclerView = view.findViewById(R.id.recycler_view_lines);
-        data = new CardsDataImpl(getResources()).init();
         initRecyclerView();
     }
 
