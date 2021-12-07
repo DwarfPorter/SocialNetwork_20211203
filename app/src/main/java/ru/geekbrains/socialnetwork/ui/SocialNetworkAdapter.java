@@ -1,6 +1,7 @@
 package ru.geekbrains.socialnetwork.ui;
 
 
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
@@ -79,6 +81,15 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
                     if (itemClickListener != null){
                         itemClickListener.onItemClick(view, getAdapterPosition());
                     }
+                }
+            });
+
+            image.setOnLongClickListener(new View.OnLongClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public boolean onLongClick(View view) {
+                    itemView.showContextMenu(10, 10);
+                    return true;
                 }
             });
         }
