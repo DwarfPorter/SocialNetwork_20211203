@@ -30,9 +30,13 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
     private OnItemClickListener itemClickListener;
     private int menuPosition;
 
-    public SocialNetworkAdapter(CardsSource dataSource, Fragment fragment){
-        this.dataSource = dataSource;
+    public SocialNetworkAdapter(Fragment fragment){
         this.fragment = fragment;
+    }
+
+    public void setDataSource(CardsSource dataSource){
+        this.dataSource = dataSource;
+        notifyDataSetChanged();
     }
 
     @NonNull
